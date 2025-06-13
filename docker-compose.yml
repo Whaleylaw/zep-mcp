@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  zep-mcp-server:
+    build: .
+    container_name: zep-mcp-server
+    restart: unless-stopped
+    ports:
+      - "8052:8052"
+    environment:
+      # Required: Set your Zep API key
+      - ZEP_API_KEY=${ZEP_API_KEY:-your_zep_api_key_here}
+      
+      # Multi-user configuration
+      - ZEP_USER_IDS=${ZEP_USER_IDS:-aaron_whaley,tech_knowledge_base}
+      - ZEP_DEFAULT_USER_ID=${ZEP_DEFAULT_USER_ID:-aaron_whaley}
+      
+      # Server configuration
+      - TRANSPORT=sse
+      - HOST=0.0.0.0
+      - PORT=8052
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8052/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # Optional: Mount for logs
+    volumes:
+      - ./logs:/app/logs
+    
+    # Run SSE server by default
+    command: ["python", "run_server.py"]
+
+  # Alternative stdio service (for direct MCP client integration)
+  zep-mcp-stdio:
+    build: .
+    container_name: zep-mcp-stdio
+    profiles: ["stdio"]  # Only run when explicitly requested
+    environment:
+      - ZEP_API_KEY=${ZEP_API_KEY:-your_zep_api_key_here}
+      - ZEP_USER_IDS=${ZEP_USER_IDS:-aaron_whaley,tech_knowledge_base}
+      - ZEP_DEFAULT_USER_ID=${ZEP_DEFAULT_USER_ID:-aaron_whaley}
+      - TRANSPORT=stdio
+    command: ["python", "run_stdio.py"]
+    # stdio mode doesn't need ports
+    network_mode: none 

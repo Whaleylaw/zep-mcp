@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "zep-memory": {
+      "command": "/path/to/your/zep-mcp-server/scripts/docker-wrapper.sh",
+      "args": [],
+      "env": {}
+    }
+  }
+} 

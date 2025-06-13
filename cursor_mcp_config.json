@@ -1,0 +1,8 @@
+{
+  "mcp.servers": {
+    "zep-memory": {
+      "url": "http://localhost:8052/sse",
+      "transport": "sse"
+    }
+  }
+}

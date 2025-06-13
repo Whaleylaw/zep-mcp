@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "zep-memory": {
+      "command": "C:\\path\\to\\your\\zep-mcp-server\\scripts\\docker-wrapper.bat",
+      "args": [],
+      "env": {}
+    }
+  }
+} 
